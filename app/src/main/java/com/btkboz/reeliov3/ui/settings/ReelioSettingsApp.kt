@@ -29,7 +29,6 @@ import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.Computer
 import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.Database
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.ExpandMore
@@ -395,7 +394,7 @@ private fun ConnectionsScreen(language: AppLanguage) {
     ScreenColumn {
         Intro(t(language, "Service readiness", "جاهزية الخدمات"), t(language, "Check the four components Reelio needs. Status always includes text and an icon.", "تحقق من المكوّنات الأربعة التي يحتاجها Reelio. تتضمن الحالة دائمًا نصًا وأيقونة."))
         SectionLabel(t(language, "DATABASE & STORAGE", "قاعدة البيانات والتخزين"))
-        ServiceCard(Icons.Outlined.Database, "Neon PostgreSQL", t(language, "Connected", "متصل"))
+        ServiceCard(Icons.Outlined.Storage, "Neon PostgreSQL", t(language, "Connected", "متصل"))
         ServiceCard(Icons.Outlined.Cloud, "Cloudflare R2", t(language, "Connected", "متصل"))
         SectionLabel(t(language, "MEDIA TOOLS", "أدوات الوسائط"))
         ServiceCard(Icons.Outlined.Download, "yt-dlp", t(language, "Available", "متاح"))
@@ -466,7 +465,7 @@ private fun DataStorageScreen(language: AppLanguage, onCacheCleared: () -> Unit)
     ScreenColumn {
         Intro(t(language, "Where Reelio keeps your data", "أين يحتفظ Reelio ببياناتك"), t(language, "Structured knowledge and media are stored separately. Temporary processing files are cleaned up after use.", "يتم تخزين المعرفة المنظمة والوسائط بشكل منفصل وتُنظف الملفات المؤقتة بعد الاستخدام."))
         SectionLabel(t(language, "PERMANENT STORAGE", "التخزين الدائم"))
-        StorageInfo(Icons.Outlined.Database, t(language, "Knowledge data", "بيانات المعرفة"), t(language, "Titles, explanations, summaries, key points, categories, tags and indexing data.", "العناوين والشروحات والملخصات والنقاط والتصنيفات والوسوم وبيانات الفهرسة."), "Neon PostgreSQL")
+        StorageInfo(Icons.Outlined.Storage, t(language, "Knowledge data", "بيانات المعرفة"), t(language, "Titles, explanations, summaries, key points, categories, tags and indexing data.", "العناوين والشروحات والملخصات والنقاط والتصنيفات والوسوم وبيانات الفهرسة."), "Neon PostgreSQL")
         StorageInfo(Icons.Outlined.Cloud, t(language, "Media", "الوسائط"), t(language, "Saved video and thumbnail files associated with your library items.", "الفيديوهات والصور المصغرة المرتبطة بعناصر المكتبة."), "Cloudflare R2")
         SectionLabel(t(language, "ON THIS DEVICE", "على هذا الجهاز"))
         StorageInfo(Icons.Outlined.Storage, t(language, "Temporary processing cache", "ذاكرة المعالجة المؤقتة"), t(language, "Automatically removed after processing completes or fails.", "تُحذف تلقائيًا بعد انتهاء المعالجة أو فشلها."), null)
