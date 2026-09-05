@@ -18,7 +18,7 @@ private val DarkColorScheme = darkColorScheme(
     surfaceVariant = ReelioDarkMuted,
     onSurfaceVariant = ReelioDarkMutedForeground,
     outline = ReelioDarkBorder,
-    outlineVariant = ReelioDarkBorder,
+    outlineVariant = ReelioDarkRing,
     error = ReelioDarkDestructive,
 )
 
@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
     surfaceVariant = ReelioLightMuted,
     onSurfaceVariant = ReelioLightMutedForeground,
     outline = ReelioLightBorder,
-    outlineVariant = ReelioLightBorder,
+    outlineVariant = ReelioLightRing,
     error = ReelioLightDestructive,
 )
 
