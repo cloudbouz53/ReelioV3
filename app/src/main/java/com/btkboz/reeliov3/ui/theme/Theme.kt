@@ -1,58 +1,59 @@
 package com.btkboz.reeliov3.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = ReelioDarkPrimary,
+    onPrimary = ReelioDarkPrimaryForeground,
+    secondary = ReelioDarkSecondary,
+    onSecondary = ReelioDarkSecondaryForeground,
+    background = ReelioDarkBackground,
+    onBackground = ReelioDarkForeground,
+    surface = ReelioDarkCard,
+    onSurface = ReelioDarkForeground,
+    surfaceVariant = ReelioDarkMuted,
+    onSurfaceVariant = ReelioDarkMutedForeground,
+    outline = ReelioDarkBorder,
+    outlineVariant = ReelioDarkBorder,
+    error = ReelioDarkDestructive,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = ReelioLightPrimary,
+    onPrimary = ReelioLightPrimaryForeground,
+    secondary = ReelioLightSecondary,
+    onSecondary = ReelioLightSecondaryForeground,
+    background = ReelioLightBackground,
+    onBackground = ReelioLightForeground,
+    surface = ReelioLightCard,
+    onSurface = ReelioLightForeground,
+    surfaceVariant = ReelioLightMuted,
+    onSurfaceVariant = ReelioLightMutedForeground,
+    outline = ReelioLightBorder,
+    outlineVariant = ReelioLightBorder,
+    error = ReelioLightDestructive,
 )
+
+enum class ReelioThemeMode { System, Light, Dark }
 
 @Composable
 fun ReelioV3Theme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    mode: ReelioThemeMode = ReelioThemeMode.System,
+    content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val darkTheme = when (mode) {
+        ReelioThemeMode.System -> isSystemInDarkTheme()
+        ReelioThemeMode.Light -> false
+        ReelioThemeMode.Dark -> true
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }
