@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Reelio Settings — Complete</title>
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://use.hugeicons.com/font/icons.css" />
+  <style type="text/tailwindcss">
+    @import "tailwindcss";
+    @custom-variant dark (&:is(.dark *));
+
+    :root {
+      --background:#ffffff; --foreground:#0a0a0a;
+      --card:#ffffff; --card-foreground:#0a0a0a;
+      --popover:#ffffff; --popover-foreground:#0a0a0a;
+      --primary:#171717; --primary-foreground:#fafafa;
+      --secondary:#f5f5f5; --secondary-foreground:#171717;
+      --muted:#f5f5f5; --muted-foreground:#737373;
+      --accent:#f5f5f5; --accent-foreground:#171717;
+      --destructive:#e7000b; --destructive-foreground:#ffffff;
+      --border:#e5e5e5; --input:#e5e5e5; --ring:#a1a1a1;
+      --radius:0.625rem;
+      --shadow-xs:0 1px 3px 0 hsl(0 0% 0% / .05);
+      --shadow-sm:0 1px 3px 0 hsl(0 0% 0% / .10),0 1px 2px -1px hsl(0 0% 0% / .10);
+    }
+    .dark {
+      --background:#0a0a0a; --foreground:#fafafa;
+      --card:#171717; --card-foreground:#fafafa;
+      --popover:#171717; --popover-foreground:#fafafa;
+      --primary:#e5e5e5; --primary-foreground:#171717;
+      --secondary:#262626; --secondary-foreground:#e5e5e5;
+      --muted:#262626; --muted-foreground:#a1a1a1;
+      --accent:#262626; --accent-foreground:#e5e5e5;
+      --destructive:#ef4444; --destructive-foreground:#ffffff;
+      --border:#262626; --input:#262626; --ring:#525252;
+    }
+    @theme inline {
+      --color-background:var(--background); --color-foreground:var(--foreground);
+      --color-card:var(--card); --color-card-foreground:var(--card-foreground);
+      --color-popover:var(--popover); --color-popover-foreground:var(--popover-foreground);
+      --color-primary:var(--primary); --color-primary-foreground:var(--primary-foreground);
+      --color-secondary:var(--secondary); --color-secondary-foreground:var(--secondary-foreground);
+      --color-muted:var(--muted); --color-muted-foreground:var(--muted-foreground);
+      --color-accent:var(--accent); --color-accent-foreground:var(--accent-foreground);
+      --color-destructive:var(--destructive); --color-destructive-foreground:var(--destructive-foreground);
+      --color-border:var(--border); --color-input:var(--input); --color-ring:var(--ring);
+      --radius-sm:calc(var(--radius) - 4px); --radius-md:calc(var(--radius) - 2px);
+      --radius-lg:var(--radius); --radius-xl:calc(var(--radius) + 4px);
+      --shadow-xs:var(--shadow-xs); --shadow-sm:var(--shadow-sm);
+    }
+    @layer base {
+      * { @apply border-border outline-ring/50; }
+      body { @apply bg-background text-foreground; }
+      button, input, select, textarea { font:inherit; }
+    }
+    :root { --space-3:3px; --space-5:5px; --space-8:8px; --space-13:13px; --space-21:21px; --space-34:34px; --space-55:55px; --space-89:89px; }
+    html { color-scheme:light; }
+    html.dark { color-scheme:dark; }
+    body { overscroll-behavior-y:none; }
+    .screen { display:none; }
+    .screen.active { display:flex; }
+    .grouped-card > .setting-row + .setting-row { border-top-width:0; }
+    .grouped-card > .setting-row:first-child { border-radius:16px 16px 0 0; }
+    .grouped-card > .setting-row:last-child { border-radius:0 0 16px 16px; box-shadow:var(--shadow-xs); }
+    .grouped-card > .setting-row:only-child { border-radius:16px; }
+    .setting-row { min-height:55px; }
+    .choice:has(input:checked) { background:var(--accent); border-color:var(--ring); }
+    .choice:has(input:checked) .check-dot { opacity:1; }
+    .check-dot { opacity:0; }
+    .switch-track { width:44px; height:26px; border-radius:999px; background:var(--secondary); border:1px solid var(--border); position:relative; transition:.18s ease; }
+    .switch-thumb { width:20px; height:20px; border-radius:999px; background:var(--background); border:1px solid var(--border); position:absolute; top:2px; left:2px; transition:.18s ease; box-shadow:var(--shadow-xs); }
+    input:checked + .switch-track { background:var(--primary); border-color:var(--primary); }
+    input:checked + .switch-track .switch-thumb { transform:translateX(18px); background:var(--primary-foreground); }
+    [dir="rtl"] input:checked + .switch-track .switch-thumb { transform:translateX(-18px); }
+    [dir="rtl"] .switch-thumb { left:auto; right:2px; }
+    details > summary { list-style:none; }
+    details > summary::-webkit-details-marker { display:none; }
+    details[open] .faq-chevron { transform:rotate(180deg); }
+    .hgi-stroke { display:inline-flex; align-items:center; justify-content:center; line-height:1; flex-shrink:0; }
+    .combobox-option { width:100%; min-height:40px; border-radius:8px; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; gap:8px; text-align:left; font-size:13px; }
+    .combobox-option:hover, .combobox-option[data-highlighted="true"] { background:var(--accent); color:var(--accent-foreground); }
+    .combobox-option[aria-selected="true"]::after { content:"✓"; font-size:13px; font-weight:600; }
+    [dir="rtl"] .combobox-option { text-align:right; }
+    .toast { transform:translateY(18px); opacity:0; pointer-events:none; transition:.2s ease; }
+    .toast.show { transform:translateY(0); opacity:1; }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+  
+    /* Full locale-direction support */
+    [dir="rtl"] .text-left { text-align: right !important; }
+    [dir="rtl"] input, [dir="rtl"] textarea { text-align: right; }
+    [dir="ltr"] input, [dir="ltr"] textarea { text-align: left; }
+    [dir="rtl"] #helpSearch { padding-right:42px !important; padding-left:13px !important; }
+    [dir="rtl"] label:has(> #helpSearch) > .hgi-search-01 { left:auto !important; right:13px !important; }
+    [dir="rtl"] .combobox-list { text-align:right; }
+    [dir="ltr"] .combobox-list { text-align:left; }
+
+    /* Horizontal directional icons are swapped in JS for RTL/LTR. */
+    .hgi-arrow-left-01, .hgi-arrow-right-01 { transform:none !important; }
+  
+    /* Reelio mobile typography */
+    :root {
+      --font-latin: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-arabic: "Noto Sans Arabic", "Noto Sans", Tahoma, Arial, sans-serif;
+    }
+
+    html, body, button, input, textarea, select {
+      font-family: var(--font-latin);
+    }
+
+    html[lang="ar"],
+    html[lang="ar"] body,
+    html[lang="ar"] button,
+    html[lang="ar"] input,
+    html[lang="ar"] textarea,
+    html[lang="ar"] select {
+      font-family: var(--font-arabic);
+    }
+
+    html[lang="ar"] body {
+      line-height: 1.65;
+    }
+
+    html[lang="ar"] code,
+    html[lang="ar"] .latin-token {
+      font-family: var(--font-latin);
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen sm:flex sm:justify-center sm:p-[34px]">
+  <div id="appShell" class="w-full max-w-md bg-background min-h-screen relative mx-auto overflow-hidden sm:rounded-[32px] sm:min-h-[850px] sm:h-[850px] sm:shadow-sm sm:border-[8px] sm:border-card">
+    <header class="h-[66px] flex items-center px-[13px] bg-background sticky top-0 z-30 border-b border-transparent">
+      <button id="backButton" type="button" class="hidden min-w-[44px] min-h-[44px] -ml-[5px] items-center justify-center rounded-[10px] hover:bg-secondary active:bg-accent focus-visible:ring-2 focus-visible:ring-ring" aria-label="Go back">
+        <i class="hgi-stroke hgi-arrow-left-01" style="font-size:20px"></i>
+      </button>
+      <h1 id="pageTitle" class="flex-1 text-center text-[19px] font-semibold tracking-tight px-[8px]">Settings</h1>
+      <div id="headerSpacer" class="w-[44px]"></div>
+    </header>
+
+    <div id="screens" class="h-[calc(100%-66px)]">
+      <!-- SETTINGS HOME -->
+      <main id="settings" class="screen active h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Settings">
+        <section class="pt-[13px]">
+          <button data-open="edit-profile" class="w-full border border-border rounded-[20px] p-[13px] bg-card shadow-xs flex items-center gap-[13px] text-left hover:bg-secondary active:opacity-90 focus-visible:ring-2 focus-visible:ring-ring">
+            <div class="w-[55px] h-[55px] rounded-full bg-muted border border-border flex items-center justify-center shrink-0"><i class="hgi-stroke hgi-user-circle " style="font-size:24px"></i></div>
+            <div class="min-w-0 flex-1">
+              <div class="font-semibold text-[16px] text-card-foreground">Your Reelio profile</div>
+              <div class="text-[13px] text-muted-foreground mt-[2px] truncate">Edit your name and profile details</div>
+            </div>
+            <i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i>
+          </button>
+        </section>
+
+        <section class="flex flex-col gap-[8px]">
+          <h2 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">General</h2>
+          <div class="grouped-card flex flex-col gap-0">
+            <button data-open="theme" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring">
+              <div class="flex items-center gap-[13px] min-w-0"><i class="hgi-stroke hgi-sun-03 w-[22px] h-[22px] shrink-0" style="font-size:22px"></i><span class="font-medium text-[16px]">Theme</span></div>
+              <div class="flex items-center gap-[8px]"><span id="themeValue" class="text-[13px] text-muted-foreground">System</span><i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i></div>
+            </button>
+            <button data-open="app-language" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring">
+              <div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-language-circle w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[16px]">App Language</span></div>
+              <div class="flex items-center gap-[8px]"><span id="appLanguageValue" class="text-[13px] text-muted-foreground">English</span><i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i></div>
+            </button>
+          </div>
+        </section>
+
+        <section class="flex flex-col gap-[8px]">
+          <h2 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">Content processing</h2>
+          <div class="grouped-card flex flex-col gap-0">
+            <button data-open="processing-defaults" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring">
+              <div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-settings-02 w-[22px] h-[22px]" style="font-size:22px"></i><div><div class="font-medium text-[16px]">Processing Defaults</div><div class="text-[12px] text-muted-foreground mt-[2px]">Explanation, summary, classification & indexing</div></div></div>
+              <i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground shrink-0" style="font-size:20px"></i>
+            </button>
+          </div>
+        </section>
+
+        <section class="flex flex-col gap-[8px]">
+          <h2 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">System</h2>
+          <div class="grouped-card flex flex-col gap-0">
+            <button data-open="connections" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring">
+              <div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-plug-01 w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[16px]">Connections</span></div>
+              <i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i>
+            </button>
+            <button data-open="credentials" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring">
+              <div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-key-01 w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[16px]">Credentials & Security</span></div>
+              <i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i>
+            </button>
+            <button data-open="data-storage" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring">
+              <div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-database w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[16px]">Data & Storage</span></div>
+              <i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i>
+            </button>
+          </div>
+        </section>
+
+        <section class="flex flex-col gap-[8px] mb-[21px]">
+          <h2 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">Support & information</h2>
+          <div class="grouped-card flex flex-col gap-0">
+            <button data-open="help-support" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring"><div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-help-circle w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[16px]">Help & Support</span></div><i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i></button>
+            <button data-open="privacy-policy" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring"><div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-shield-01 w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[16px]">Privacy Policy</span></div><i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i></button>
+            <button data-open="about" class="setting-row w-full flex items-center justify-between p-[13px] bg-card border border-border text-left hover:bg-secondary active:opacity-90 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring"><div class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-information-circle w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[16px]">About Reelio</span></div><i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i></button>
+          </div>
+        </section>
+      </main>
+
+      <!-- EDIT PROFILE -->
+      <main id="edit-profile" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Edit Profile">
+        <section class="flex flex-col items-center pt-[21px] pb-[8px]">
+          <div class="w-[89px] h-[89px] rounded-full bg-muted border border-border flex items-center justify-center"><i class="hgi-stroke hgi-user-circle text-muted-foreground" style="font-size:36px"></i></div>
+          <button type="button" class="mt-[13px] min-h-[44px] px-[13px] text-[14px] font-medium rounded-[10px] hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring">Change photo</button>
+          <p class="mt-[3px] text-[12px] text-muted-foreground text-center">JPG or PNG. Use a clear square photo.</p>
+        </section>
+        <form id="profileForm" class="flex flex-col gap-[21px]">
+          <fieldset class="flex flex-col gap-[13px]">
+            <legend class="text-[14px] font-semibold mb-[5px]">Profile information</legend>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">Full name</span><input id="fullName" value="Reelio User" required autocomplete="name" class="w-full h-[55px] rounded-[10px] border border-input bg-background px-[13px] text-[15px] focus:ring-2 focus:ring-ring/30 focus:border-ring outline-none" /><span class="text-[12px] text-muted-foreground">This name appears on your Reelio profile.</span></label>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">Email address</span><input id="email" type="email" value="user@example.com" required autocomplete="email" class="w-full h-[55px] rounded-[10px] border border-input bg-background px-[13px] text-[15px] focus:ring-2 focus:ring-ring/30 focus:border-ring outline-none" /><span class="text-[12px] text-muted-foreground flex items-center gap-[5px]"><i class="hgi-stroke hgi-checkmark-circle-02 w-[14px] h-[14px]" style="font-size:14px"></i>Verified email address</span></label>
+          </fieldset>
+          <div class="sticky bottom-0 -mx-[21px] mt-[13px] border-t border-border bg-background px-[21px] py-[13px]">
+            <button type="submit" class="w-full min-h-[55px] rounded-[10px] bg-primary text-primary-foreground font-semibold focus-visible:ring-2 focus-visible:ring-ring">Save changes</button>
+          </div>
+        </form>
+      </main>
+
+      <!-- THEME -->
+      <main id="theme" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Theme">
+        <section class="pt-[13px]"><h2 class="text-[18px] font-semibold tracking-tight">Choose how Reelio looks</h2><p class="text-[13px] text-muted-foreground mt-[5px]">The layout stays identical. Only semantic theme colors change.</p></section>
+        <fieldset class="flex flex-col gap-[8px]" aria-label="Theme preference">
+          <label class="choice min-h-[68px] rounded-[16px] border border-border bg-card p-[13px] flex items-center gap-[13px] cursor-pointer focus-within:ring-2 focus-within:ring-ring"><input class="sr-only" type="radio" name="theme" value="system"><span class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center"><i class="hgi-stroke hgi-computer-settings " style="font-size:20px"></i></span><span class="flex-1"><span class="block text-[15px] font-medium">System</span><span class="block text-[12px] text-muted-foreground mt-[2px]">Follow your device appearance</span></span><span class="w-5 h-5 rounded-full border border-ring flex items-center justify-center"><span class="check-dot w-2.5 h-2.5 rounded-full bg-primary"></span></span></label>
+          <label class="choice min-h-[68px] rounded-[16px] border border-border bg-card p-[13px] flex items-center gap-[13px] cursor-pointer focus-within:ring-2 focus-within:ring-ring"><input class="sr-only" type="radio" name="theme" value="light" checked><span class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center"><i class="hgi-stroke hgi-sun-03 " style="font-size:20px"></i></span><span class="flex-1"><span class="block text-[15px] font-medium">Light</span><span class="block text-[12px] text-muted-foreground mt-[2px]">Use the light Reelio palette</span></span><span class="w-5 h-5 rounded-full border border-ring flex items-center justify-center"><span class="check-dot w-2.5 h-2.5 rounded-full bg-primary"></span></span></label>
+          <label class="choice min-h-[68px] rounded-[16px] border border-border bg-card p-[13px] flex items-center gap-[13px] cursor-pointer focus-within:ring-2 focus-within:ring-ring"><input class="sr-only" type="radio" name="theme" value="dark"><span class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center"><i class="hgi-stroke hgi-moon-02 " style="font-size:20px"></i></span><span class="flex-1"><span class="block text-[15px] font-medium">Dark</span><span class="block text-[12px] text-muted-foreground mt-[2px]">Use the dark Reelio palette</span></span><span class="w-5 h-5 rounded-full border border-ring flex items-center justify-center"><span class="check-dot w-2.5 h-2.5 rounded-full bg-primary"></span></span></label>
+        </fieldset>
+      </main>
+
+      <!-- APP LANGUAGE -->
+      <main id="app-language" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="App Language">
+        <section class="pt-[13px]"><h2 class="text-[18px] font-semibold">Choose the interface language</h2><p class="text-[13px] text-muted-foreground mt-[5px]">This changes Reelio navigation, labels, alignment, and directional icons.</p></section>
+        <fieldset class="flex flex-col gap-[8px]" aria-label="Application language">
+          <label class="choice min-h-[68px] rounded-[16px] border border-border bg-card p-[13px] flex items-center gap-[13px] cursor-pointer focus-within:ring-2 focus-within:ring-ring"><input class="sr-only" type="radio" name="appLang" value="English" checked><span class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center text-[13px] font-semibold">EN</span><span class="flex-1"><span class="block text-[15px] font-medium">English</span><span class="block text-[12px] text-muted-foreground">Left-to-right interface</span></span><span class="w-5 h-5 rounded-full border border-ring flex items-center justify-center"><span class="check-dot w-2.5 h-2.5 rounded-full bg-primary"></span></span></label>
+          <label class="choice min-h-[68px] rounded-[16px] border border-border bg-card p-[13px] flex items-center gap-[13px] cursor-pointer focus-within:ring-2 focus-within:ring-ring"><input class="sr-only" type="radio" name="appLang" value="العربية"><span class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center text-[13px] font-semibold">AR</span><span class="flex-1"><span class="block text-[15px] font-medium">العربية</span><span class="block text-[12px] text-muted-foreground">واجهة من اليمين إلى اليسار</span></span><span class="w-5 h-5 rounded-full border border-ring flex items-center justify-center"><span class="check-dot w-2.5 h-2.5 rounded-full bg-primary"></span></span></label>
+        </fieldset>
+        <div class="rounded-[12px] bg-secondary p-[13px] text-[13px] text-secondary-foreground flex gap-[8px]"><i class="hgi-stroke hgi-information-circle mt-[2px] shrink-0" style="font-size:16px"></i><p>Changing the app language does not change your processing-language defaults.</p></div>
+      </main>
+
+      <!-- PROCESSING DEFAULTS -->
+      <main id="processing-defaults" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Processing Defaults">
+        <section class="pt-[13px]"><h2 class="text-[18px] font-semibold">Default languages for new videos</h2><p class="text-[13px] text-muted-foreground mt-[5px]">Use these automatically when adding content. You can still override them for an individual video.</p></section>
+        <form id="processingForm" class="flex flex-col gap-[21px]">
+          <section class="grouped-card flex flex-col gap-0">
+            <div class="setting-row bg-card border border-border p-[13px] flex items-center justify-between gap-[13px]">
+              <div class="min-w-0 flex-1"><div class="text-[15px] font-medium">Explanation language</div><div class="text-[12px] text-muted-foreground mt-[2px]">Language used to explain the reel's idea</div></div>
+              <div class="language-combobox relative shrink-0" data-name="explanationLanguage" data-value="Arabic">
+                <button type="button" class="combobox-trigger min-w-[132px] h-[42px] rounded-[9px] border border-input bg-background px-[10px] text-[13px] flex items-center justify-between gap-[8px] hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="explanationLanguage-listbox">
+                  <span class="combobox-value truncate">Arabic</span><i class="hgi-stroke hgi-arrow-up-down text-muted-foreground shrink-0" style="font-size:16px"></i>
+                </button>
+                <div class="combobox-popover hidden absolute end-0 top-[48px] z-40 w-[200px] rounded-[12px] border border-border bg-popover text-popover-foreground shadow-sm p-[5px]" data-popover>
+                  
+                  <div id="explanationLanguage-listbox" class="combobox-list max-h-[180px] overflow-y-auto" role="listbox" aria-label="Explanation language"><button type="button" class="combobox-option" role="option" data-value="Auto">Auto</button><button type="button" class="combobox-option" role="option" data-value="Arabic">Arabic</button><button type="button" class="combobox-option" role="option" data-value="English">English</button></div>
+                  
+                </div>
+                <input type="hidden" name="explanationLanguage" value="Arabic">
+              </div>
+            </div>
+            <div class="setting-row bg-card border border-border p-[13px] flex items-center justify-between gap-[13px]">
+              <div class="min-w-0 flex-1"><div class="text-[15px] font-medium">Summary language</div><div class="text-[12px] text-muted-foreground mt-[2px]">Language used for the concise summary</div></div>
+              <div class="language-combobox relative shrink-0" data-name="summaryLanguage" data-value="Arabic">
+                <button type="button" class="combobox-trigger min-w-[132px] h-[42px] rounded-[9px] border border-input bg-background px-[10px] text-[13px] flex items-center justify-between gap-[8px] hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="summaryLanguage-listbox"><span class="combobox-value truncate">Arabic</span><i class="hgi-stroke hgi-arrow-up-down text-muted-foreground shrink-0" style="font-size:16px"></i></button>
+                <div class="combobox-popover hidden absolute end-0 top-[48px] z-40 w-[200px] rounded-[12px] border border-border bg-popover text-popover-foreground shadow-sm p-[5px]" data-popover><div id="summaryLanguage-listbox" class="combobox-list max-h-[180px] overflow-y-auto" role="listbox" aria-label="Summary language"><button type="button" class="combobox-option" role="option" data-value="Auto">Auto</button><button type="button" class="combobox-option" role="option" data-value="Arabic">Arabic</button><button type="button" class="combobox-option" role="option" data-value="English">English</button></div></div>
+                <input type="hidden" name="summaryLanguage" value="Arabic">
+              </div>
+            </div>
+            <div class="setting-row bg-card border border-border p-[13px] flex items-center justify-between gap-[13px]">
+              <div class="min-w-0 flex-1"><div class="text-[15px] font-medium">Classification language</div><div class="text-[12px] text-muted-foreground mt-[2px]">Category and subcategory labels</div></div>
+              <div class="language-combobox relative shrink-0" data-name="classificationLanguage" data-value="Arabic">
+                <button type="button" class="combobox-trigger min-w-[132px] h-[42px] rounded-[9px] border border-input bg-background px-[10px] text-[13px] flex items-center justify-between gap-[8px] hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="classificationLanguage-listbox"><span class="combobox-value truncate">Arabic</span><i class="hgi-stroke hgi-arrow-up-down text-muted-foreground shrink-0" style="font-size:16px"></i></button>
+                <div class="combobox-popover hidden absolute end-0 top-[48px] z-40 w-[200px] rounded-[12px] border border-border bg-popover text-popover-foreground shadow-sm p-[5px]" data-popover><div id="classificationLanguage-listbox" class="combobox-list max-h-[180px] overflow-y-auto" role="listbox" aria-label="Classification language"><button type="button" class="combobox-option" role="option" data-value="Auto">Auto</button><button type="button" class="combobox-option" role="option" data-value="Arabic">Arabic</button><button type="button" class="combobox-option" role="option" data-value="English">English</button></div></div>
+                <input type="hidden" name="classificationLanguage" value="Arabic">
+              </div>
+            </div>
+            <div class="setting-row bg-card border border-border p-[13px] flex items-center justify-between gap-[13px]">
+              <div class="min-w-0 flex-1"><div class="text-[15px] font-medium">Indexing language</div><div class="text-[12px] text-muted-foreground mt-[2px]">Keywords and search terms</div></div>
+              <div class="language-combobox relative shrink-0" data-name="indexingLanguage" data-value="Arabic">
+                <button type="button" class="combobox-trigger min-w-[132px] h-[42px] rounded-[9px] border border-input bg-background px-[10px] text-[13px] flex items-center justify-between gap-[8px] hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-controls="indexingLanguage-listbox"><span class="combobox-value truncate">Arabic</span><i class="hgi-stroke hgi-arrow-up-down text-muted-foreground shrink-0" style="font-size:16px"></i></button>
+                <div class="combobox-popover hidden absolute end-0 bottom-[48px] z-40 w-[200px] rounded-[12px] border border-border bg-popover text-popover-foreground shadow-sm p-[5px]" data-popover><div id="indexingLanguage-listbox" class="combobox-list max-h-[180px] overflow-y-auto" role="listbox" aria-label="Indexing language"><button type="button" class="combobox-option" role="option" data-value="Auto">Auto</button><button type="button" class="combobox-option" role="option" data-value="Arabic">Arabic</button><button type="button" class="combobox-option" role="option" data-value="English">English</button></div></div>
+                <input type="hidden" name="indexingLanguage" value="Arabic">
+              </div>
+            </div>
+          </section>
+          <div class="rounded-[12px] bg-secondary p-[13px] text-[13px] text-secondary-foreground flex gap-[8px]"><i class="hgi-stroke hgi-sparkles mt-[2px] shrink-0" style="font-size:16px"></i><p>A video can be in English while its explanation, summary, classification, and indexing are created in Arabic.</p></div>
+          <div class="sticky bottom-0 -mx-[21px] border-t border-border bg-background px-[21px] py-[13px]"><button type="submit" class="w-full min-h-[55px] rounded-[10px] bg-primary text-primary-foreground font-semibold focus-visible:ring-2 focus-visible:ring-ring">Save defaults</button></div>
+        </form>
+      </main>
+
+      <!-- CONNECTIONS -->
+      <main id="connections" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Connections">
+        <section class="pt-[13px]"><h2 class="text-[18px] font-semibold">Service readiness</h2><p class="text-[13px] text-muted-foreground mt-[5px]">Check the four components Reelio needs. Status always includes text and an icon.</p></section>
+        <section class="flex flex-col gap-[8px]"><h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">Database & storage</h3><div class="grouped-card flex flex-col gap-0">
+          <div class="setting-row bg-card border border-border p-[13px] flex items-center gap-[13px]"><div class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center"><i class="hgi-stroke hgi-database " style="font-size:20px"></i></div><div class="min-w-0 flex-1"><div class="font-medium text-[15px]">Neon PostgreSQL</div><div class="status text-[12px] text-muted-foreground mt-[2px] flex items-center gap-[5px]"><i class="hgi-stroke hgi-checkmark-circle-02 w-[14px] h-[14px]" style="font-size:14px"></i>Connected</div></div><button class="connection-check min-h-[40px] px-[12px] rounded-[9px] border border-border text-[13px] font-medium hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring">Check</button></div>
+          <div class="setting-row bg-card border border-border p-[13px] flex items-center gap-[13px]"><div class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center"><i class="hgi-stroke hgi-hard-drive " style="font-size:20px"></i></div><div class="min-w-0 flex-1"><div class="font-medium text-[15px]">Cloudflare R2</div><div class="status text-[12px] text-muted-foreground mt-[2px] flex items-center gap-[5px]"><i class="hgi-stroke hgi-checkmark-circle-02 w-[14px] h-[14px]" style="font-size:14px"></i>Connected</div></div><button class="connection-check min-h-[40px] px-[12px] rounded-[9px] border border-border text-[13px] font-medium hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring">Check</button></div>
+        </div></section>
+        <section class="flex flex-col gap-[8px]"><h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">Media tools</h3><div class="grouped-card flex flex-col gap-0">
+          <div class="setting-row bg-card border border-border p-[13px] flex items-center gap-[13px]"><div class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center"><i class="hgi-stroke hgi-download-04 " style="font-size:20px"></i></div><div class="min-w-0 flex-1"><div class="font-medium text-[15px]">yt-dlp</div><div class="status text-[12px] text-muted-foreground mt-[2px] flex items-center gap-[5px]"><i class="hgi-stroke hgi-checkmark-circle-02 w-[14px] h-[14px]" style="font-size:14px"></i>Available</div></div><button class="connection-check min-h-[40px] px-[12px] rounded-[9px] border border-border text-[13px] font-medium hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring">Check</button></div>
+          <div class="setting-row bg-card border border-border p-[13px] flex items-center gap-[13px]"><div class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center"><i class="hgi-stroke hgi-audio-wave-01 " style="font-size:20px"></i></div><div class="min-w-0 flex-1"><div class="font-medium text-[15px]">FFmpeg</div><div class="status text-[12px] text-muted-foreground mt-[2px] flex items-center gap-[5px]"><i class="hgi-stroke hgi-checkmark-circle-02 w-[14px] h-[14px]" style="font-size:14px"></i>Available</div></div><button class="connection-check min-h-[40px] px-[12px] rounded-[9px] border border-border text-[13px] font-medium hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring">Check</button></div>
+        </div></section>
+        <div class="rounded-[12px] bg-secondary p-[13px] text-[13px] text-secondary-foreground flex gap-[8px]"><i class="hgi-stroke hgi-shield-02 mt-[2px] shrink-0" style="font-size:16px"></i><p>Technical output is kept out of the interface. Failures are translated into clear user-facing messages.</p></div>
+      </main>
+
+      <!-- CREDENTIALS -->
+      <main id="credentials" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Credentials & Security">
+        <section class="pt-[13px]"><h2 class="text-[18px] font-semibold">Secure service credentials</h2><p class="text-[13px] text-muted-foreground mt-[5px]">Saved secrets remain masked. Reelio should store them using Android Keystore-backed encrypted storage.</p></section>
+        <form id="credentialsForm" class="flex flex-col gap-[21px]">
+          <section class="flex flex-col gap-[13px]"><h3 class="text-[14px] font-semibold">AI services</h3>
+            <label class="flex flex-col gap-[8px]"><span class="flex justify-between gap-2 text-[13px] font-medium"><span>Gemini API key</span><span class="text-muted-foreground font-normal">Configured</span></span><div class="flex gap-[8px]"><input type="password" placeholder="••••••••••••••••" autocomplete="off" class="secret-input min-w-0 flex-1 h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"><button type="button" class="toggle-secret min-w-[52px] h-[52px] rounded-[10px] border border-border hover:bg-secondary" aria-label="Show or hide Gemini key"><i class="hgi-stroke hgi-view mx-auto" style="font-size:20px"></i></button></div></label>
+            <label class="flex flex-col gap-[8px]"><span class="flex justify-between gap-2 text-[13px] font-medium"><span>ElevenLabs API key</span><span class="text-muted-foreground font-normal">Configured</span></span><div class="flex gap-[8px]"><input type="password" placeholder="••••••••••••••••" autocomplete="off" class="secret-input min-w-0 flex-1 h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"><button type="button" class="toggle-secret min-w-[52px] h-[52px] rounded-[10px] border border-border hover:bg-secondary" aria-label="Show or hide ElevenLabs key"><i class="hgi-stroke hgi-view mx-auto" style="font-size:20px"></i></button></div></label>
+          </section>
+          <section class="flex flex-col gap-[13px]"><h3 class="text-[14px] font-semibold">Database & storage</h3>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">Database URL</span><input type="password" placeholder="••••••••••••••••" autocomplete="off" class="h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"></label>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">Cloudflare account ID</span><input type="password" placeholder="••••••••••••••••" autocomplete="off" class="h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"></label>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">R2 access key ID</span><input type="password" placeholder="••••••••••••••••" autocomplete="off" class="h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"></label>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">R2 secret access key</span><input type="password" placeholder="••••••••••••••••" autocomplete="off" class="h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"></label>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">R2 bucket name</span><input type="text" placeholder="Your bucket name" class="h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"></label>
+            <label class="flex flex-col gap-[8px]"><span class="text-[13px] font-medium">R2 endpoint</span><input type="url" placeholder="https://…" class="h-[52px] rounded-[10px] border border-input bg-background px-[13px] focus:ring-2 focus:ring-ring/30 outline-none"></label>
+          </section>
+          <div class="rounded-[12px] bg-secondary p-[13px] text-[13px] text-secondary-foreground flex gap-[8px]"><i class="hgi-stroke hgi-lock-key mt-[2px] shrink-0" style="font-size:16px"></i><p>Never show full saved credentials in the UI or include them in logs and error reports.</p></div>
+          <div class="sticky bottom-0 -mx-[21px] border-t border-border bg-background px-[21px] py-[13px]"><button type="submit" class="w-full min-h-[55px] rounded-[10px] bg-primary text-primary-foreground font-semibold">Save securely</button></div>
+        </form>
+      </main>
+
+      <!-- DATA & STORAGE -->
+      <main id="data-storage" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Data & Storage">
+        <section class="pt-[13px]"><h2 class="text-[18px] font-semibold">Where Reelio keeps your data</h2><p class="text-[13px] text-muted-foreground mt-[5px]">Structured knowledge and media are stored separately. Temporary processing files are cleaned up after use.</p></section>
+        <section class="flex flex-col gap-[8px]"><h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">Permanent storage</h3><div class="grouped-card flex flex-col gap-0">
+          <div class="setting-row bg-card border border-border p-[13px] flex gap-[13px]"><i class="hgi-stroke hgi-database w-[22px] h-[22px] mt-[2px]" style="font-size:22px"></i><div><div class="font-medium text-[15px]">Knowledge data</div><div class="text-[12px] text-muted-foreground mt-[2px]">Titles, explanations, summaries, key points, categories, tags and indexing data.</div><div class="text-[12px] font-medium mt-[5px]">Neon PostgreSQL</div></div></div>
+          <div class="setting-row bg-card border border-border p-[13px] flex gap-[13px]"><i class="hgi-stroke hgi-hard-drive w-[22px] h-[22px] mt-[2px]" style="font-size:22px"></i><div><div class="font-medium text-[15px]">Media</div><div class="text-[12px] text-muted-foreground mt-[2px]">Saved video and thumbnail files associated with your library items.</div><div class="text-[12px] font-medium mt-[5px]">Cloudflare R2</div></div></div>
+        </div></section>
+        <section class="flex flex-col gap-[8px]"><h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">On this device</h3><div class="grouped-card flex flex-col gap-0">
+          <div class="setting-row bg-card border border-border p-[13px] flex items-center justify-between gap-[13px]"><div class="flex gap-[13px]"><i class="hgi-stroke hgi-folder-time w-[22px] h-[22px]" style="font-size:22px"></i><div><div class="font-medium text-[15px]">Temporary processing cache</div><div class="text-[12px] text-muted-foreground mt-[2px]">Automatically removed after processing completes or fails.</div></div></div></div>
+          <button id="clearCache" class="setting-row bg-card border border-border p-[13px] flex items-center justify-between text-left hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"><div class="flex gap-[13px]"><i class="hgi-stroke hgi-delete-02 w-[22px] h-[22px]" style="font-size:22px"></i><div><div class="font-medium text-[15px]">Clear temporary cache</div><div class="text-[12px] text-muted-foreground mt-[2px]">Does not remove saved Library items.</div></div></div><span class="text-[13px] font-medium">Clear</span></button>
+        </div></section>
+      </main>
+
+      <!-- PRIVACY -->
+      <main id="privacy-policy" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Privacy Policy">
+        <section class="pt-[13px]"><h2 class="text-[21px] font-semibold tracking-tight">Privacy in Reelio</h2><p class="text-[13px] text-muted-foreground mt-[5px]">A concise product-facing summary based on the Reelio implementation requirements.</p></section>
+        <article class="flex flex-col gap-[21px] text-[14px] leading-6">
+          <section><h3 class="font-semibold text-[15px]">What Reelio processes</h3><p class="text-muted-foreground mt-[5px]">Reelio processes video links and content you choose to add so it can create organized knowledge such as a clear title, explanation, summary, key points, categories, tags and indexing terms.</p></section>
+          <section><h3 class="font-semibold text-[15px]">Internal transcript</h3><p class="text-muted-foreground mt-[5px]">Speech-to-text output is an internal processing layer used to understand the content. It is not presented as a user-facing transcript feature.</p></section>
+          <section><h3 class="font-semibold text-[15px]">Credentials</h3><p class="text-muted-foreground mt-[5px]">Service credentials are sensitive. Saved values must remain encrypted, masked in the interface, and redacted from logs and error reports.</p></section>
+          <section><h3 class="font-semibold text-[15px]">Storage</h3><p class="text-muted-foreground mt-[5px]">Structured library data is stored in Neon PostgreSQL and permanent media is stored in Cloudflare R2. Temporary local files should be deleted after they are no longer needed.</p></section>
+          <section><h3 class="font-semibold text-[15px]">User-facing errors</h3><p class="text-muted-foreground mt-[5px]">Reelio should present understandable error messages instead of stack traces, shell output, exit codes or raw infrastructure details.</p></section>
+        </article>
+        <div class="rounded-[12px] bg-secondary p-[13px] text-[12px] text-secondary-foreground">This mockup is product UI copy, not a substitute for a finalized legal privacy policy.</div>
+      </main>
+
+      <!-- HELP -->
+      <main id="help-support" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="Help & Support">
+        <section class="pt-[13px]"><h2 class="text-[18px] font-semibold">How can we help?</h2><p class="text-[13px] text-muted-foreground mt-[5px]">Start with common questions or run a connection check if Reelio cannot process content.</p></section>
+        <label class="relative"><i class="hgi-stroke hgi-search-01 absolute left-[13px] top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-muted-foreground" style="font-size:18px"></i><input id="helpSearch" type="search" placeholder="Search help" class="w-full h-[52px] rounded-[10px] border border-input bg-background pl-[42px] pr-[13px] focus:ring-2 focus:ring-ring/30 outline-none"></label>
+        <section id="faqList" class="flex flex-col gap-[8px]">
+          <details class="faq rounded-[16px] border border-border bg-card"><summary class="min-h-[55px] p-[13px] flex items-center gap-[13px] cursor-pointer focus-visible:ring-2 focus-visible:ring-ring rounded-[16px]"><span class="flex-1 font-medium text-[15px]">How do I add a video?</span><i class="hgi-stroke hgi-arrow-down-01 faq-chevron text-muted-foreground transition-transform" style="font-size:20px"></i></summary><div class="px-[13px] pb-[13px] text-[13px] leading-5 text-muted-foreground">Use Share to Reelio from a supported app, or copy the video URL and paste it on Home.</div></details>
+          <details class="faq rounded-[16px] border border-border bg-card"><summary class="min-h-[55px] p-[13px] flex items-center gap-[13px] cursor-pointer focus-visible:ring-2 focus-visible:ring-ring rounded-[16px]"><span class="flex-1 font-medium text-[15px]">Can each processing output use a different language?</span><i class="hgi-stroke hgi-arrow-down-01 faq-chevron text-muted-foreground transition-transform" style="font-size:20px"></i></summary><div class="px-[13px] pb-[13px] text-[13px] leading-5 text-muted-foreground">Yes. Explanation, summary, classification and indexing can each have their own language default.</div></details>
+          <details class="faq rounded-[16px] border border-border bg-card"><summary class="min-h-[55px] p-[13px] flex items-center gap-[13px] cursor-pointer focus-visible:ring-2 focus-visible:ring-ring rounded-[16px]"><span class="flex-1 font-medium text-[15px]">Why can't Reelio process a video?</span><i class="hgi-stroke hgi-arrow-down-01 faq-chevron text-muted-foreground transition-transform" style="font-size:20px"></i></summary><div class="px-[13px] pb-[13px] text-[13px] leading-5 text-muted-foreground">Open Connections to check database, storage and local media-tool readiness. Reelio should show a clear status and recovery action if a component is unavailable.</div></details>
+          <details class="faq rounded-[16px] border border-border bg-card"><summary class="min-h-[55px] p-[13px] flex items-center gap-[13px] cursor-pointer focus-visible:ring-2 focus-visible:ring-ring rounded-[16px]"><span class="flex-1 font-medium text-[15px]">Where is the transcript?</span><i class="hgi-stroke hgi-arrow-down-01 faq-chevron text-muted-foreground transition-transform" style="font-size:20px"></i></summary><div class="px-[13px] pb-[13px] text-[13px] leading-5 text-muted-foreground">Reelio does not expose the transcript as a user feature. It is used internally only to understand the video.</div></details>
+        </section>
+        <section class="flex flex-col gap-[8px]"><h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">Troubleshooting</h3><button data-open="connections" class="w-full min-h-[55px] rounded-[12px] border border-border bg-card px-[13px] flex items-center justify-between hover:bg-secondary"><span class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-stethoscope w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[15px]">Check Connections</span></span><i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i></button></section>
+      </main>
+
+      <!-- ABOUT -->
+      <main id="about" class="screen h-full overflow-y-auto px-[21px] pb-[34px] flex-col gap-[21px]" data-title="About Reelio">
+        <section class="pt-[21px] flex flex-col items-center text-center">
+          <div class="w-[72px] h-[72px] rounded-[18px] bg-primary text-primary-foreground flex items-center justify-center border border-border"><i class="hgi-stroke hgi-bookmark-check-01 " style="font-size:32px"></i></div>
+          <h2 class="text-[22px] font-semibold mt-[13px] tracking-tight">Reelio</h2><p class="text-[13px] text-muted-foreground mt-[3px]">Save → Understand → Organize → Find</p>
+        </section>
+        <section class="text-[14px] leading-6"><p>Reelio turns useful short-form videos into an organized personal knowledge library. Instead of saving a video and forgetting why it mattered, Reelio helps preserve the knowledge inside it.</p></section>
+        <section class="rounded-[16px] border border-border bg-card p-[13px] flex flex-col gap-[13px]"><div class="flex items-center justify-between"><span class="text-[13px] text-muted-foreground">Version</span><span class="text-[13px] font-medium font-mono">1.0.0</span></div><div class="flex items-center justify-between"><span class="text-[13px] text-muted-foreground">Interface languages</span><span class="text-[13px] font-medium">English, العربية</span></div><div class="flex items-center justify-between"><span class="text-[13px] text-muted-foreground">Theme</span><span class="text-[13px] font-medium">System / Light / Dark</span></div></section>
+        <section class="flex flex-col gap-[8px]"><h3 class="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-[5px]">Supported discovery flow</h3><div class="rounded-[16px] border border-border bg-card p-[13px] text-[13px] leading-5 text-muted-foreground">Share to Reelio or Paste Link → understand and organize → save to Library → search and find later.</div></section>
+        <button data-open="privacy-policy" class="w-full min-h-[55px] rounded-[12px] border border-border bg-card px-[13px] flex items-center justify-between hover:bg-secondary"><span class="flex items-center gap-[13px]"><i class="hgi-stroke hgi-shield-01 w-[22px] h-[22px]" style="font-size:22px"></i><span class="font-medium text-[15px]">Privacy Policy</span></span><i class="hgi-stroke hgi-arrow-right-01 text-muted-foreground" style="font-size:20px"></i></button>
+      </main>
+    </div>
+
+    <!-- lightweight ReUI/shadcn-inspired confirmation dialog -->
+    <div id="dialogOverlay" class="hidden absolute inset-0 z-50 bg-black/40 p-[21px] items-end sm:items-center justify-center" role="presentation">
+      <div id="confirmDialog" class="w-full max-w-sm rounded-[16px] border border-border bg-popover text-popover-foreground shadow-sm p-[21px]" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" aria-describedby="dialogDescription">
+        <div class="w-10 h-10 rounded-[10px] bg-secondary flex items-center justify-center mb-[13px]"><i class="hgi-stroke hgi-delete-02 " style="font-size:20px"></i></div>
+        <h2 id="dialogTitle" class="text-[18px] font-semibold">Clear temporary cache?</h2>
+        <p id="dialogDescription" class="text-[13px] text-muted-foreground mt-[5px] leading-5">Temporary processing files will be removed. Your saved Library items will be kept.</p>
+        <div class="mt-[21px] flex flex-col gap-[8px]"><button id="confirmClear" class="min-h-[48px] rounded-[10px] bg-primary text-primary-foreground font-semibold">Clear temporary cache</button><button id="cancelDialog" class="min-h-[44px] rounded-[10px] font-medium hover:bg-secondary">Keep cache</button></div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast absolute left-[21px] right-[21px] bottom-[21px] z-[60] rounded-[12px] border border-border bg-popover text-popover-foreground shadow-sm p-[13px] flex items-center gap-[8px]" role="status" aria-live="polite"><i class="hgi-stroke hgi-checkmark-circle-02 " style="font-size:16px"></i><span id="toastText" class="text-[13px]">Saved</span></div>
+  </div>
+
+<script>
+(() => {
+  const state = { current:'settings', stack:[], theme:'light', appLanguage:'English' };
+
+  const ar = {
+    'Reelio Settings — Complete':'إعدادات Reelio — كاملة',
+    'Settings':'الإعدادات',
+    'Your Reelio profile':'ملفك الشخصي في Reelio',
+    'Edit your name and profile details':'عدّل اسمك وتفاصيل ملفك الشخصي',
+    'General':'عام', 'Theme':'المظهر', 'System':'النظام', 'App Language':'لغة التطبيق', 'English':'الإنجليزية',
+    'Content processing':'معالجة المحتوى', 'Processing Defaults':'إعدادات المعالجة الافتراضية',
+    'Explanation, summary, classification & indexing':'الشرح، التلخيص، التصنيف والفهرسة',
+    'Connections':'الاتصالات', 'Credentials & Security':'بيانات الاعتماد والأمان', 'Data & Storage':'البيانات والتخزين',
+    'Support & information':'الدعم والمعلومات', 'Help & Support':'المساعدة والدعم', 'Privacy Policy':'سياسة الخصوصية', 'About Reelio':'حول Reelio',
+    'Edit Profile':'تعديل الملف الشخصي', 'Change photo':'تغيير الصورة', 'JPG or PNG. Use a clear square photo.':'JPG أو PNG. استخدم صورة مربعة وواضحة.',
+    'Profile information':'معلومات الملف الشخصي', 'Full name':'الاسم الكامل', 'This name appears on your Reelio profile.':'يظهر هذا الاسم في ملفك الشخصي على Reelio.',
+    'Email address':'عنوان البريد الإلكتروني', 'Verified email address':'عنوان بريد إلكتروني موثّق', 'Save changes':'حفظ التغييرات',
+    'Choose how Reelio looks':'اختر مظهر Reelio', 'The layout stays identical. Only semantic theme colors change.':'يبقى التخطيط كما هو، وتتغير ألوان المظهر الدلالية فقط.',
+    'Follow your device appearance':'اتبع مظهر جهازك', 'Light':'فاتح', 'Use the light Reelio palette':'استخدم لوحة Reelio الفاتحة', 'Dark':'داكن', 'Use the dark Reelio palette':'استخدم لوحة Reelio الداكنة',
+    'Choose the interface language':'اختر لغة الواجهة', 'This changes Reelio navigation, labels, alignment, and directional icons.':'يغيّر هذا لغة التنقل والتسميات والمحاذاة والأيقونات الاتجاهية في Reelio.',
+    'Left-to-right interface':'واجهة من اليسار إلى اليمين', 'Changing the app language does not change your processing-language defaults.':'تغيير لغة التطبيق لا يغيّر إعدادات لغات المعالجة الافتراضية.',
+    'Default languages for new videos':'اللغات الافتراضية للفيديوهات الجديدة', 'Use these automatically when adding content. You can still override them for an individual video.':'استخدم هذه اللغات تلقائيًا عند إضافة المحتوى، ويمكنك تغييرها لكل فيديو بشكل مستقل.',
+    'Explanation language':'لغة الشرح', "Language used to explain the reel's idea":'اللغة المستخدمة لشرح فكرة الريل',
+    'Arabic':'العربية', 'Auto':'تلقائي', 'Summary language':'لغة التلخيص', 'Language used for the concise summary':'اللغة المستخدمة للتلخيص المختصر',
+    'Classification language':'لغة التصنيف', 'Category and subcategory labels':'تسميات التصنيف والتصنيف الفرعي', 'Indexing language':'لغة الفهرسة', 'Keywords and search terms':'الكلمات المفتاحية ومصطلحات البحث',
+    'A video can be in English while its explanation, summary, classification, and indexing are created in Arabic.':'يمكن أن يكون الفيديو بالإنجليزية بينما يتم إنشاء الشرح والتلخيص والتصنيف والفهرسة بالعربية.',
+    'Save defaults':'حفظ الإعدادات الافتراضية', 'Service readiness':'جاهزية الخدمات', 'Check the four components Reelio needs. Status always includes text and an icon.':'تحقق من المكوّنات الأربعة التي يحتاجها Reelio. تتضمن الحالة دائمًا نصًا وأيقونة.',
+    'Database & storage':'قاعدة البيانات والتخزين', 'Connected':'متصل', 'Check':'تحقق', 'Media tools':'أدوات الوسائط', 'Available':'متاح',
+    'Technical output is kept out of the interface. Failures are translated into clear user-facing messages.':'لا يظهر الإخراج التقني في الواجهة. يتم تحويل حالات الفشل إلى رسائل واضحة للمستخدم.',
+    'Secure service credentials':'بيانات اعتماد الخدمات الآمنة', 'Saved secrets remain masked. Reelio should store them using Android Keystore-backed encrypted storage.':'تبقى البيانات السرية المحفوظة مخفية، ويجب على Reelio تخزينها بشكل مشفّر ومدعوم بـ Android Keystore.',
+    'AI services':'خدمات الذكاء الاصطناعي', 'Gemini API key':'مفتاح Gemini API', 'Configured':'تم الإعداد', 'ElevenLabs API key':'مفتاح ElevenLabs API',
+    'Database URL':'رابط قاعدة البيانات', 'Cloudflare account ID':'معرّف حساب Cloudflare', 'R2 access key ID':'معرّف مفتاح الوصول إلى R2', 'R2 secret access key':'مفتاح الوصول السري إلى R2', 'R2 bucket name':'اسم حاوية R2', 'R2 endpoint':'نقطة نهاية R2',
+    'Never show full saved credentials in the UI or include them in logs and error reports.':'لا تعرض بيانات الاعتماد المحفوظة كاملة في الواجهة ولا تضمّنها في السجلات أو تقارير الأخطاء.', 'Save securely':'حفظ بأمان',
+    'Where Reelio keeps your data':'أين يحتفظ Reelio ببياناتك', 'Structured knowledge and media are stored separately. Temporary processing files are cleaned up after use.':'يتم تخزين المعرفة المنظمة والوسائط بشكل منفصل، وتُحذف ملفات المعالجة المؤقتة بعد استخدامها.',
+    'Permanent storage':'التخزين الدائم', 'Knowledge data':'بيانات المعرفة', 'Titles, explanations, summaries, key points, categories, tags and indexing data.':'العناوين والشروحات والملخصات والنقاط الرئيسية والتصنيفات والوسوم وبيانات الفهرسة.',
+    'Media':'الوسائط', 'Saved video and thumbnail files associated with your library items.':'ملفات الفيديو والصور المصغرة المحفوظة والمرتبطة بعناصر مكتبتك.', 'On this device':'على هذا الجهاز',
+    'Temporary processing cache':'ذاكرة المعالجة المؤقتة', 'Automatically removed after processing completes or fails.':'تُحذف تلقائيًا بعد اكتمال المعالجة أو فشلها.', 'Clear temporary cache':'مسح الذاكرة المؤقتة', 'Does not remove saved Library items.':'لا يحذف العناصر المحفوظة في المكتبة.', 'Clear':'مسح',
+    'Privacy in Reelio':'الخصوصية في Reelio', 'A concise product-facing summary based on the Reelio implementation requirements.':'ملخص موجز موجّه للمستخدم استنادًا إلى متطلبات تنفيذ Reelio.',
+    'What Reelio processes':'ما الذي يعالجه Reelio', 'Reelio processes video links and content you choose to add so it can create organized knowledge such as a clear title, explanation, summary, key points, categories, tags and indexing terms.':'يعالج Reelio روابط الفيديو والمحتوى الذي تختار إضافته لإنشاء معرفة منظمة، مثل عنوان واضح وشرح وملخص ونقاط رئيسية وتصنيفات ووسوم ومصطلحات فهرسة.',
+    'Internal transcript':'النص الداخلي', 'Speech-to-text output is an internal processing layer used to understand the content. It is not presented as a user-facing transcript feature.':'تحويل الكلام إلى نص هو طبقة معالجة داخلية تُستخدم لفهم المحتوى، ولا يتم عرضه كميزة نص مكتوب للمستخدم.',
+    'Credentials':'بيانات الاعتماد', 'Service credentials are sensitive. Saved values must remain encrypted, masked in the interface, and redacted from logs and error reports.':'بيانات اعتماد الخدمات حساسة. يجب أن تبقى القيم المحفوظة مشفّرة ومخفية في الواجهة ومحجوبة من السجلات وتقارير الأخطاء.',
+    'Storage':'التخزين', 'Structured library data is stored in Neon PostgreSQL and permanent media is stored in Cloudflare R2. Temporary local files should be deleted after they are no longer needed.':'تُخزن بيانات المكتبة المنظمة في Neon PostgreSQL والوسائط الدائمة في Cloudflare R2. ويجب حذف الملفات المحلية المؤقتة عندما لا تعود مطلوبة.',
+    'User-facing errors':'الأخطاء الظاهرة للمستخدم', 'Reelio should present understandable error messages instead of stack traces, shell output, exit codes or raw infrastructure details.':'يجب أن يعرض Reelio رسائل خطأ مفهومة بدلًا من تتبعات الأخطاء أو مخرجات الطرفية أو رموز الخروج أو تفاصيل البنية التحتية الخام.',
+    'This mockup is product UI copy, not a substitute for a finalized legal privacy policy.':'هذا النص خاص بواجهة نموذج المنتج، ولا يُعد بديلًا عن سياسة خصوصية قانونية نهائية.',
+    'How can we help?':'كيف يمكننا مساعدتك؟', 'Start with common questions or run a connection check if Reelio cannot process content.':'ابدأ بالأسئلة الشائعة أو تحقق من الاتصالات إذا تعذر على Reelio معالجة المحتوى.',
+    'How do I add a video?':'كيف أضيف فيديو؟', 'Use Share to Reelio from a supported app, or copy the video URL and paste it on Home.':'استخدم «المشاركة إلى Reelio» من تطبيق مدعوم، أو انسخ رابط الفيديو والصقه في الشاشة الرئيسية.',
+    'Can each processing output use a different language?':'هل يمكن استخدام لغة مختلفة لكل ناتج من نواتج المعالجة؟', 'Yes. Explanation, summary, classification and indexing can each have their own language default.':'نعم. يمكن أن يكون لكل من الشرح والتلخيص والتصنيف والفهرسة لغة افتراضية مستقلة.',
+    "Why can't Reelio process a video?":'لماذا لا يستطيع Reelio معالجة فيديو؟', 'Open Connections to check database, storage and local media-tool readiness. Reelio should show a clear status and recovery action if a component is unavailable.':'افتح «الاتصالات» للتحقق من جاهزية قاعدة البيانات والتخزين وأدوات الوسائط المحلية. يجب أن يعرض Reelio حالة واضحة وإجراءً مناسبًا إذا كان أحد المكوّنات غير متاح.',
+    'Where is the transcript?':'أين النص المكتوب؟', 'Reelio does not expose the transcript as a user feature. It is used internally only to understand the video.':'لا يعرض Reelio النص المكتوب كميزة للمستخدم، بل يُستخدم داخليًا فقط لفهم الفيديو.',
+    'Troubleshooting':'استكشاف الأخطاء وإصلاحها', 'Check Connections':'تحقق من الاتصالات',
+    'Save → Understand → Organize → Find':'احفظ ← افهم ← نظّم ← اعثر',
+    'Reelio turns useful short-form videos into an organized personal knowledge library. Instead of saving a video and forgetting why it mattered, Reelio helps preserve the knowledge inside it.':'يحوّل Reelio الفيديوهات القصيرة المفيدة إلى مكتبة معرفة شخصية منظمة. بدلًا من حفظ فيديو ثم نسيان سبب أهميته، يساعدك Reelio على الاحتفاظ بالمعرفة الموجودة داخله.',
+    'Version':'الإصدار', 'Interface languages':'لغات الواجهة', 'English, العربية':'الإنجليزية، العربية', 'System / Light / Dark':'النظام / فاتح / داكن',
+    'Supported discovery flow':'مسار الاستخدام المدعوم', 'Share to Reelio or Paste Link → understand and organize → save to Library → search and find later.':'المشاركة إلى Reelio أو لصق الرابط ← الفهم والتنظيم ← الحفظ في المكتبة ← البحث والعثور عليه لاحقًا.',
+    'Clear temporary cache?':'هل تريد مسح الذاكرة المؤقتة؟', 'Temporary processing files will be removed. Your saved Library items will be kept.':'ستتم إزالة ملفات المعالجة المؤقتة، مع الاحتفاظ بالعناصر المحفوظة في مكتبتك.', 'Keep cache':'الاحتفاظ بالذاكرة المؤقتة', 'Saved':'تم الحفظ',
+    'Go back':'رجوع', 'Search help':'البحث في المساعدة', 'Show or hide Gemini key':'إظهار أو إخفاء مفتاح Gemini', 'Show or hide ElevenLabs key':'إظهار أو إخفاء مفتاح ElevenLabs',
+    'Show secret':'إظهار القيمة السرية', 'Hide secret':'إخفاء القيمة السرية', 'Theme updated':'تم تحديث المظهر', 'App language preference updated':'تم تحديث لغة التطبيق',
+    'Review the highlighted fields':'راجع الحقول المحددة', 'Profile changes saved':'تم حفظ تغييرات الملف الشخصي', 'Processing defaults saved':'تم حفظ إعدادات المعالجة الافتراضية',
+    'Credentials saved securely':'تم حفظ بيانات الاعتماد بأمان', 'Checking…':'جارٍ التحقق…', 'Checking':'جارٍ التحقق', 'Temporary cache cleared':'تم مسح الذاكرة المؤقتة'
+  };
+  const t = text => state.appLanguage==='العربية' ? (ar[text] || text) : text;
+  const localizedTextNodes=[];
+  const localizedAttrs=[];
+  const walker=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let textNode;
+  while(textNode=walker.nextNode()){
+    if(['SCRIPT','STYLE'].includes(textNode.parentElement?.tagName)) continue;
+    const trimmed=textNode.nodeValue.trim();
+    if(trimmed) localizedTextNodes.push({node:textNode,en:trimmed});
+  }
+  document.querySelectorAll('[data-title], [placeholder], [aria-label]').forEach(el=>{
+    ['data-title','placeholder','aria-label'].forEach(attr=>{ if(el.hasAttribute(attr)) localizedAttrs.push({el,attr,en:el.getAttribute(attr)}); });
+  });
+  function syncDirectionalIcons(rtl){
+    document.querySelectorAll('.hgi-arrow-left-01, .hgi-arrow-right-01').forEach(icon=>{
+      if(!icon.dataset.ltrArrow){
+        icon.dataset.ltrArrow = icon.classList.contains('hgi-arrow-left-01') ? 'left' : 'right';
+      }
+      const desired = rtl
+        ? (icon.dataset.ltrArrow === 'left' ? 'right' : 'left')
+        : icon.dataset.ltrArrow;
+      icon.classList.toggle('hgi-arrow-left-01', desired === 'left');
+      icon.classList.toggle('hgi-arrow-right-01', desired === 'right');
+    });
+  }
+  function applyLocale(){
+    const rtl=state.appLanguage==='العربية';
+    document.documentElement.dir=rtl?'rtl':'ltr'; document.documentElement.lang=rtl?'ar':'en';
+    syncDirectionalIcons(rtl);
+    document.title=rtl ? ar['Reelio Settings — Complete'] : 'Reelio Settings — Complete';
+    localizedTextNodes.forEach(({node,en})=>{
+      const raw=node.nodeValue, lead=raw.match(/^\s*/)?.[0]||'', trail=raw.match(/\s*$/)?.[0]||'';
+      node.nodeValue=lead+(rtl?(ar[en]||en):en)+trail;
+    });
+    localizedAttrs.forEach(({el,attr,en})=>el.setAttribute(attr,rtl?(ar[en]||en):en));
+    document.getElementById('themeValue').textContent=t(state.theme.charAt(0).toUpperCase()+state.theme.slice(1));
+    document.getElementById('appLanguageValue').textContent=rtl?'العربية':'English';
+    document.querySelectorAll('.language-combobox').forEach(combo=>{
+      combo.querySelector('.combobox-value').textContent=t(combo.dataset.value);
+      combo.querySelectorAll('.combobox-option').forEach(o=>o.textContent=t(o.dataset.value));
+    });
+    const current=document.getElementById(state.current); if(current) pageTitle.textContent=current.getAttribute('data-title')||'Reelio';
+  }
+  const screens = [...document.querySelectorAll('.screen')];
+  const pageTitle = document.getElementById('pageTitle');
+  const backButton = document.getElementById('backButton');
+  const headerSpacer = document.getElementById('headerSpacer');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+
+  const renderIcons = () => {};
+  const showToast = (text) => { toastText.textContent=text; toast.classList.add('show'); clearTimeout(showToast.t); showToast.t=setTimeout(()=>toast.classList.remove('show'),1800); };
+
+  function openScreen(id, push=true) {
+    const target = document.getElementById(id); if (!target) return;
+    if (push && state.current !== id) state.stack.push(state.current);
+    state.current=id;
+    screens.forEach(s=>s.classList.toggle('active', s.id===id));
+    pageTitle.textContent=target.dataset.title || 'Reelio';
+    const isRoot=id==='settings';
+    backButton.classList.toggle('hidden', isRoot); backButton.classList.toggle('flex', !isRoot); headerSpacer.classList.toggle('hidden', !isRoot);
+    target.scrollTop=0; renderIcons();
+    requestAnimationFrame(()=>{ if (!isRoot) backButton.focus({preventScroll:true}); });
+  }
+  function goBack(){ const prev=state.stack.pop() || 'settings'; openScreen(prev,false); }
+  backButton.addEventListener('click',goBack);
+  document.addEventListener('click',e=>{ const opener=e.target.closest('[data-open]'); if(opener) openScreen(opener.dataset.open); });
+
+  function applyTheme(value){
+    state.theme=value;
+    const prefersDark=matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.classList.toggle('dark', value==='dark' || (value==='system' && prefersDark));
+    document.getElementById('themeValue').textContent=t(value.charAt(0).toUpperCase()+value.slice(1));
+  }
+  document.querySelectorAll('input[name="theme"]').forEach(r=>r.addEventListener('change',()=>{applyTheme(r.value); showToast(t('Theme updated'));}));
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{ if(state.theme==='system') applyTheme('system'); });
+  applyTheme('light');
+
+  document.querySelectorAll('input[name="appLang"]').forEach(r=>r.addEventListener('change',()=>{
+    state.appLanguage=r.value; applyLocale();
+    showToast(t('App language preference updated')); renderIcons();
+  }));
+
+  document.getElementById('profileForm').addEventListener('submit',e=>{e.preventDefault(); const name=document.getElementById('fullName'),email=document.getElementById('email'); if(!name.value.trim() || !email.validity.valid){ showToast(t('Review the highlighted fields')); (!name.value.trim()?name:email).focus(); return; } showToast(t('Profile changes saved'));});
+  // ReUI-inspired single-select language pickers for Processing Defaults.
+  // No search field: each picker intentionally exposes only Auto / Arabic / English.
+  const languageComboboxes = [...document.querySelectorAll('.language-combobox')];
+  const closeCombobox = (combo, restoreFocus=false) => {
+    const trigger=combo.querySelector('.combobox-trigger'), popover=combo.querySelector('[data-popover]');
+    popover.classList.add('hidden'); trigger.setAttribute('aria-expanded','false');
+    combo.querySelectorAll('.combobox-option').forEach(o=>o.removeAttribute('data-highlighted'));
+    if(restoreFocus) trigger.focus();
+  };
+  const openCombobox = combo => {
+    languageComboboxes.forEach(other=>{ if(other!==combo) closeCombobox(other); });
+    const trigger=combo.querySelector('.combobox-trigger'), popover=combo.querySelector('[data-popover]');
+    popover.classList.remove('hidden'); trigger.setAttribute('aria-expanded','true');
+    const selected=combo.dataset.value;
+    const options=[...combo.querySelectorAll('.combobox-option')];
+    options.forEach(o=>o.setAttribute('aria-selected',String(o.dataset.value===selected)));
+    const active=options.find(o=>o.dataset.value===selected) || options[0];
+    options.forEach(o=>o.removeAttribute('data-highlighted'));
+    if(active) active.dataset.highlighted='true';
+  };
+  const selectComboboxValue = (combo, value) => {
+    combo.dataset.value=value;
+    combo.querySelector('.combobox-value').textContent=t(value);
+    combo.querySelector('input[type="hidden"]').value=value;
+    combo.querySelectorAll('.combobox-option').forEach(o=>o.setAttribute('aria-selected',String(o.dataset.value===value)));
+    closeCombobox(combo,true);
+  };
+  languageComboboxes.forEach(combo=>{
+    const trigger=combo.querySelector('.combobox-trigger'), options=[...combo.querySelectorAll('.combobox-option')];
+    options.forEach(o=>o.setAttribute('aria-selected',String(o.dataset.value===combo.dataset.value)));
+    trigger.addEventListener('click',()=> trigger.getAttribute('aria-expanded')==='true' ? closeCombobox(combo) : openCombobox(combo));
+    trigger.addEventListener('keydown',e=>{ if(e.key==='ArrowDown' || e.key==='ArrowUp' || e.key==='Enter' || e.key===' '){ e.preventDefault(); openCombobox(combo); } if(e.key==='Escape') closeCombobox(combo,true); });
+    options.forEach(option=>{
+      option.addEventListener('click',()=>selectComboboxValue(combo,option.dataset.value));
+      option.addEventListener('keydown',e=>{ if(e.key==='Enter' || e.key===' '){e.preventDefault();selectComboboxValue(combo,option.dataset.value);} if(e.key==='Escape'){e.preventDefault();closeCombobox(combo,true);} });
+    });
+  });
+  document.addEventListener('pointerdown',e=>{ languageComboboxes.forEach(combo=>{ if(!combo.contains(e.target)) closeCombobox(combo); }); });
+
+  document.getElementById('processingForm').addEventListener('submit',e=>{e.preventDefault(); showToast(t('Processing defaults saved'));});
+  document.getElementById('credentialsForm').addEventListener('submit',e=>{e.preventDefault(); showToast(t('Credentials saved securely'));});
+
+  document.querySelectorAll('.toggle-secret').forEach(btn=>btn.addEventListener('click',()=>{ const input=btn.parentElement.querySelector('input'); const visible=input.type==='text'; input.type=visible?'password':'text'; btn.setAttribute('aria-label', t(visible?'Show secret':'Hide secret')); btn.innerHTML=`<i class="hgi-stroke hgi-${visible?'eye':'eye-off'} mx-auto" style="font-size:20px"></i>`; renderIcons(); }));
+
+  document.querySelectorAll('.connection-check').forEach(btn=>btn.addEventListener('click',()=>{ const row=btn.closest('.setting-row'), status=row.querySelector('.status'); btn.disabled=true; btn.textContent=t('Checking…'); status.innerHTML='<i class="hgi-stroke hgi-loading-03 w-[14px] h-[14px]" style="font-size:14px"></i>'+t('Checking'); renderIcons(); setTimeout(()=>{ status.innerHTML='<i class="hgi-stroke hgi-checkmark-circle-02 w-[14px] h-[14px]" style="font-size:14px"></i>'+t(row.textContent.includes('yt-dlp')||row.textContent.includes('FFmpeg')?'Available':'Connected'); btn.disabled=false; btn.textContent=t('Check'); renderIcons(); },650); }));
+
+  const overlay=document.getElementById('dialogOverlay'), cancelDialog=document.getElementById('cancelDialog'), confirmClear=document.getElementById('confirmClear'); let dialogReturn=null;
+  function closeDialog(){ overlay.classList.add('hidden'); overlay.classList.remove('flex'); dialogReturn?.focus(); }
+  document.getElementById('clearCache').addEventListener('click',e=>{dialogReturn=e.currentTarget; overlay.classList.remove('hidden'); overlay.classList.add('flex'); cancelDialog.focus();});
+  cancelDialog.addEventListener('click',closeDialog); confirmClear.addEventListener('click',()=>{closeDialog(); showToast(t('Temporary cache cleared'));});
+  overlay.addEventListener('click',e=>{if(e.target===overlay)closeDialog();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!overlay.classList.contains('hidden')) closeDialog();});
+
+  document.getElementById('helpSearch').addEventListener('input',e=>{ const q=e.target.value.trim().toLowerCase(); document.querySelectorAll('.faq').forEach(f=>f.classList.toggle('hidden', q && !f.textContent.toLowerCase().includes(q))); });
+  applyLocale();
+
+})();
+</script>
+</body>
+</html>
